@@ -19,7 +19,7 @@ const registrarUsuario = async(req,res)=>{
 
     const existeUsuario = await Usuario.findOne({email});
 
-    if(existeUsuario._id){
+    if(existeUsuario?._id){
         return res.json({status:false,msg:'El usuario ingresado ya existe.'});
     }
 
@@ -33,7 +33,29 @@ const registrarUsuario = async(req,res)=>{
     }
 }
 
+const confirmarCuenta = async(req,res)=>{
+    
+    const {token} = req.params;
+    const usuario = await Usuario.findOne({token});
+
+    //validar que exista el usuario con dicho token
+    if(!usuario?._id){
+        return res.json({status:false,msg:'Token inválido.'});
+    }
+
+    try {
+        usuario.confirmado = true;
+        usuario.token = '';
+        await usuario.save();
+        return res.json({status:true,msg:'Tu cuenta ha sido confirmada con éxito.'});
+
+    } catch (error) {
+        console.log(error)
+    }
+}
+
 export{
     iniciarSesion,
     registrarUsuario,
+    confirmarCuenta,
 }
