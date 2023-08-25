@@ -1,3 +1,4 @@
+import bcrypt from 'bcrypt'
 import Usuario from "../models/usuarioModel.js"
 import { generarToken } from "../helpers/helpers.js"
 
@@ -24,6 +25,7 @@ const registrarUsuario = async(req,res)=>{
     }
 
     try {
+        usuario.password = await bcrypt.hash(usuario.password,10);
         usuario.token = generarToken();
         const usuarioAlmacenado = await usuario.save();
         return res.json({status:true,msg:'Usuario creado correctamente.',data:usuarioAlmacenado});
@@ -34,7 +36,7 @@ const registrarUsuario = async(req,res)=>{
 }
 
 const confirmarCuenta = async(req,res)=>{
-    
+
     const {token} = req.params;
     const usuario = await Usuario.findOne({token});
 
@@ -54,8 +56,37 @@ const confirmarCuenta = async(req,res)=>{
     }
 }
 
+const recuperarCuenta = async (req,res)=>{
+    const {email} = req.body;
+
+    if(!email){
+        return res.json({status:false,msg:'Debes ingresar primero un email.'});
+    }
+    
+    const usuario = await Usuario.findOne({email});
+
+    if(!usuario?._id){
+        return res.json({status:false,msg:'No existe ninguna cuenta asociada a dicho correo.'});
+    }
+
+    if(!usuario.confirmado){
+        return res.json({status:false,msg:'Primero debes confirmar tu cuenta.'});
+    }
+
+    try {
+        usuario.token = generarToken();
+        await usuario.save();
+        return res.json({status:true,msg:'Se han enviado las instrucciones a tu correo.'});
+
+    } catch (error) {
+        console.log(error)
+    }
+
+}
+
 export{
     iniciarSesion,
     registrarUsuario,
     confirmarCuenta,
+    recuperarCuenta,
 }
