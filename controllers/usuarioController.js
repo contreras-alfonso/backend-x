@@ -1,6 +1,8 @@
 import bcrypt from 'bcrypt'
 import Usuario from "../models/usuarioModel.js"
 import { generarToken,generarJWT } from "../helpers/helpers.js"
+import enviarEmailVerificacionCuenta from '../helpers/enviarCorreoVerificacion.js'
+import enviarCorreoOlvidoPassword from '../helpers/enviarCorreoOlvidoPassword.js'
 
 const iniciarSesion = async(req,res)=>{
 
@@ -61,7 +63,8 @@ const registrarUsuario = async(req,res)=>{
         usuario.password = await bcrypt.hash(usuario.password,10);
         usuario.token = generarToken();
         const usuarioAlmacenado = await usuario.save();
-        return res.json({status:true,msg:'Usuario creado correctamente.',data:usuarioAlmacenado});
+        enviarEmailVerificacionCuenta(usuario.nombre,usuario.token)
+        return res.json({status:true,msg:'Confirma tu cuenta, revisa tu bandeja de entrada.'});
 
     } catch (error) {
         console.log(error)
@@ -110,7 +113,9 @@ const recuperarCuenta = async (req,res)=>{
     try {
         usuario.token = generarToken();
         await usuario.save();
+        enviarCorreoOlvidoPassword(usuario.nombre,usuario.token);
         return res.json({status:true,msg:'Se han enviado las instrucciones a tu correo.'});
+
 
     } catch (error) {
         console.log(error)
