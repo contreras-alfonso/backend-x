@@ -27,7 +27,7 @@ const iniciarSesion = async(req,res)=>{
         return res.json({status:false,msg:'Usuario o contraseña incorrecta.'});
     }
 
-    const jwt = generarJWT(usuario.nombre,usuario.email)
+    const jwt = generarJWT(usuario._id,usuario.nombre,usuario.email)
 
     return res.json({
         status:true,
@@ -162,9 +162,11 @@ const actualizarPassword = async(req,res)=>{
     } catch (error) {
         console.log(error)
     }
-    
 
+}
 
+const perfil = async (req,res) => {
+    res.json(req.usuario);
 }
 
 export{
@@ -174,4 +176,5 @@ export{
     recuperarCuenta,
     actualizarPasswordToken,
     actualizarPassword,
+    perfil,
 }

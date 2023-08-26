@@ -12,7 +12,7 @@ dotenv.config()
 
 conectarDB();
 
-const whitelist = [process.env.FRONTEND_URL,"https://api.sendgrid.com"]
+const whitelist = [process.env.FRONTEND_URL,"https://api.sendgrid.com","https://web.postman.co"]
 
 const corsOptions = {
     origin: function(origin,callback){

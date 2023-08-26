@@ -1,5 +1,6 @@
 import express from 'express'
-import { iniciarSesion,registrarUsuario,confirmarCuenta,recuperarCuenta,actualizarPasswordToken,actualizarPassword } from '../controllers/usuarioController.js';
+import { iniciarSesion,registrarUsuario,confirmarCuenta,recuperarCuenta,actualizarPasswordToken,actualizarPassword,perfil } from '../controllers/usuarioController.js';
+import verificarAuth from '../middlewares/verificarAuth.js';
 
 const router = express.Router();
 
@@ -9,5 +10,7 @@ router.get('/confirmar-cuenta/:token',confirmarCuenta)
 router.post('/recuperar-cuenta',recuperarCuenta)
 router.get('/actualizar-password/:token',actualizarPasswordToken)
 router.post('/actualizar-password/:token',actualizarPassword)
+router.get('/perfil',verificarAuth,perfil)
+
 
 export default router;
