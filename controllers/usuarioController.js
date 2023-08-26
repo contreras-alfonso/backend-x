@@ -56,7 +56,7 @@ const registrarUsuario = async(req,res)=>{
     const existeUsuario = await Usuario.findOne({email});
 
     if(existeUsuario?._id){
-        return res.json({status:false,msg:'El usuario ingresado ya existe.'});
+        return res.json({status:false,msg:'El email ingresado ya está en uso, intenta con otro.'});
     }
 
     try {
@@ -64,7 +64,7 @@ const registrarUsuario = async(req,res)=>{
         usuario.token = generarToken();
         const usuarioAlmacenado = await usuario.save();
         enviarEmailVerificacionCuenta(usuario.nombre,usuario.token)
-        return res.json({status:true,msg:'Confirma tu cuenta, revisa tu bandeja de entrada.'});
+        return res.json({status:true,msg:`Estas a un paso, revisa tu bandeja de entrada y confirma tu cuenta. ${email}`});
 
     } catch (error) {
         console.log(error)
@@ -103,11 +103,11 @@ const recuperarCuenta = async (req,res)=>{
     const usuario = await Usuario.findOne({email});
 
     if(!usuario?._id){
-        return res.json({status:false,msg:'No existe ninguna cuenta asociada a dicho correo.'});
+        return res.json({status:false,msg:'No existe ninguna cuenta asociada a dicho email.'});
     }
 
     if(!usuario.confirmado){
-        return res.json({status:false,msg:'Primero debes confirmar tu cuenta.'});
+        return res.json({status:false,msg:'Aún no has confirmado tu cuenta, verifica tu bandeja y confirma tu acceso.'});
     }
 
     try {
@@ -157,7 +157,7 @@ const actualizarPassword = async(req,res)=>{
         usuario.password = await bcrypt.hash(password,10);
         usuario.token = '';
         await usuario.save();
-        return res.json({status:true,msg:'Tu password ha sido actualizado correctamente.'});
+        return res.json({status:true,msg:'Tu contraseña ha sido actualizada correctamente.'});
 
     } catch (error) {
         console.log(error)
