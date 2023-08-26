@@ -13,19 +13,8 @@ dotenv.config()
 
 conectarDB();
 
-const whitelist = [process.env.FRONTEND_URL,"https://api.sendgrid.com","https://web.postman.co"]
-
 const corsOptions = {
-    origin: function(origin,callback){
-        console.log(origin)
-        if(whitelist.includes(origin)){
-            // Pueda Consultar la API
-            callback(null,true);
-        }else{
-            // No está permitido
-            callback(new Error('Error de Cors'))
-        }
-    } 
+    origin: "*"
 } 
 
 app.use(cors(corsOptions))
