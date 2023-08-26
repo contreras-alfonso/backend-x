@@ -1,10 +1,10 @@
 import sgMail from '@sendgrid/mail'
 
-const enviarCorreoOlvidoPassword = (nombre,token) => {
+const enviarCorreoOlvidoPassword = (nombre,token,destino) => {
     sgMail.setApiKey(process.env.API_SENDGRID);
 
     const message = {
-        to: 'contrerasalfonso.lino@gmail.com',
+        to: destino,
         from: 'contrerasalfonso.lino@gmail.com',
         subject: 'Recuperación de contraseña',
         text:'Dev X',

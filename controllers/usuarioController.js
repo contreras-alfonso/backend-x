@@ -63,7 +63,7 @@ const registrarUsuario = async(req,res)=>{
         usuario.password = await bcrypt.hash(usuario.password,10);
         usuario.token = generarToken();
         const usuarioAlmacenado = await usuario.save();
-        enviarEmailVerificacionCuenta(usuario.nombre,usuario.token)
+        enviarEmailVerificacionCuenta(usuario.nombre,usuario.token,usuario.email)
         return res.json({status:true,msg:`Estas a un paso, revisa tu bandeja de entrada y confirma tu cuenta. ${email}`});
 
     } catch (error) {
@@ -113,7 +113,7 @@ const recuperarCuenta = async (req,res)=>{
     try {
         usuario.token = generarToken();
         await usuario.save();
-        enviarCorreoOlvidoPassword(usuario.nombre,usuario.token);
+        enviarCorreoOlvidoPassword(usuario.nombre,usuario.token,usuario.email);
         return res.json({status:true,msg:'Se han enviado las instrucciones a tu correo.'});
 
 
