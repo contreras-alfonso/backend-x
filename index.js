@@ -21,9 +21,7 @@ app.use(cors(corsOptions))
 
 app.use('/api/usuarios',usuarioRoutes);
 app.use('/api/publicaciones',publicacionRoutes);
-app.use('/',(req,res)=>{
-    res.json({msg:'Server ON'})
-});
+
 
 
 app.listen(process.env.PORT,()=>{
