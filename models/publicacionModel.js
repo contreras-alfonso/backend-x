@@ -9,10 +9,16 @@ const publicacionSchema = mongoose.Schema({
         type:mongoose.Schema.Types.ObjectId,
         ref: "Loco",
     },
+    horaPublicada:{
+        type:String,
+        required:true,
+    },
     favorito:{
         type:Boolean,
         default:false,
     }
+},{
+    timestamps:true,
 })
 
 const Publicacion = mongoose.model('Twr',publicacionSchema);

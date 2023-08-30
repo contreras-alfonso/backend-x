@@ -23,7 +23,6 @@ app.use('/api/usuarios',usuarioRoutes);
 app.use('/api/publicaciones',publicacionRoutes);
 
 
-
 app.listen(process.env.PORT,()=>{
     console.log(`Proyecto correcto. ${process.env.PORT}`)
 })
